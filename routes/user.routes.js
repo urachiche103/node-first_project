@@ -2,7 +2,6 @@ const express = require('express')
 const router = express.Router()
 
 const {findAll, findById, createUser} = require('../controllers/user.controller.js')
-
 const User = require('../models/user.model')
 
 router.get('/', async (req, res) => {
@@ -19,13 +18,13 @@ router.get('/:id', async (req, res) => {
     }
 })
 
-router.post('/', async (req, res) => {
-    if (req.body.email === undefined || req.body.email.trim() === '') {
-        res.json({msg: 'error: email is missing'})
-    } else {
-        await createUser(req.body.email.trim(), req.body.password)
-        }
-        res.json({msg: 'created user'})
-    })
+router.post('/', async (req, res, next) => {
+    await createUser(
+        req.body.name,
+        req.body.lastName,
+        req.body.email,
+        req.body.password)
+    res.json({msg: 'user created'})
+})
 
 module.exports = router

@@ -12,10 +12,10 @@ async function findById(id){
 
 async function createUser(name, lastName, email, password){
     const newUser = new User({
-        name,
-        lastName,
-        email,
-        password
+        name: name,
+        lastName: lastName,
+        email: email,
+        password: password,
     })
     await newUser.save()
     return newUser
