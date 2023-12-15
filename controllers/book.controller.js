@@ -12,12 +12,12 @@ async function findById(id){
 
 async function createBook(author, country, language, pages, title, year){
     const newBook = new Book({
-        author,
-        country,
-        language,
-        pages,
-        title,
-        year
+        author: author,
+        country: country,
+        language: language,
+        pages: pages,
+        title: title,
+        year: year,
     })
     await newBook.save()
     return newBook
@@ -28,15 +28,9 @@ async function deleteBook(id){
     return bookDeleted
 }
 
-async function modifyBook(id, nom, mar, mod){
-    const modifyBook =  await Book.findByIdAndUpdate(id, {author, country, language, pages, title, year})
-    return modifyBook
-}
-
 module.exports  = {
     findAll,
     findById,
     createBook,
     deleteBook,
-    modifyBook,
 }

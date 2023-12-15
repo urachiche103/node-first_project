@@ -1,8 +1,7 @@
 const express = require('express')
 const router = express.Router()
 
-const {findAll, findById, createBook, deleteBook, modifyBook} = require('../controllers/book.controller.js')
-const {validateCreateBook} = require('../helpers/validators.js')
+const {findAll, findById, createBook, deleteBook} = require('../controllers/book.controller')
 
 router.get('/', async (req, res) => {
     try {
@@ -27,56 +26,24 @@ router.get('/:id', async (req, res) => {
     }
 })
 
-router.post('/', async (req, res) => {
+router.post('/', async (req, res, next) => {
     await createBook(
-        req.body.author.thrim(),
-        req.body.country.thrim(),
-        req.body.language.thrim(),
-        req.body.pages,
-        req.body.title.thrim(),
-        req.body.year
-        )
-    res.json({msg: 'book created'})
-})
-
-router.delete('/:id', async (req, res) => {
-    const deletedBook = await deleteBook(req.params.id)
-    if (deletedBook) {
-        res.json({msg: 'error: book not found'})
-    }
-})
-
-router.put('/:id', async (req, res) => {
-    const found = null
-    const msg = []
-    const validationResult = validateCreateBook(req.body)
-    if (!validationResult.valid) {
-        res.status(400).json({msg: validationResult.message})
-    } else {
-        found = await modifyBook(
-            req.params.id,
-            req.body.author,
-            req.body.country,
-            req.body.language,
-            req.body.pages,
-            req.body.title,
-            req.body.year)
-        res.json(found === null ? {msg: 'error: book not found'} : {data: found, messsage: msg})
-    }
-})
-
-router.patch('/:id', async (req, res) => {
-    const found = null
-    const msg = []
-    found = await modifyBook(
-        req.params.id,
         req.body.author,
         req.body.country,
         req.body.language,
         req.body.pages,
         req.body.title,
         req.body.year)
-    res.json(found === null ? {msg: 'error: book not found'} : {data: found, message: msg})
+    res.json({msg: 'book created'})
+})
+
+router.delete('/:id', async (req, res) => {
+    const bookDeleted = await deleteBook(req.params.id)
+    if (bookDeleted) {
+        res.json({msg: 'book deleted'})
+    } else {
+        res.json({msg: 'error: book not found'})
+        }
 })
 
 module.exports = router

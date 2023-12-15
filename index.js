@@ -10,7 +10,10 @@ const app = express()
 app.use(bodyParser.urlencoded({extended: false}))
 app.use(bodyParser.json())
 
-mongoose.connect(process.env.URL)
+mongoose.connect(process.env.URL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+})
     .then(() => console.log('Connected to database!'))
     .catch(err => console.log('err'));
 
