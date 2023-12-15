@@ -1,4 +1,4 @@
-const Book = require('../models/user.model')
+const User = require('../models/user.model')
 
 async function findAll(){
     const users = await User.find()
@@ -6,7 +6,7 @@ async function findAll(){
 }
 
 async function findById(id){
-    const userFound = await USer.findById(id)
+    const userFound = await User.findById(id)
     return userFound
 }
 
@@ -24,5 +24,5 @@ async function createUser(name, lastName, email, password){
 module.exports  = {
     findAll,
     findById,
-    createUser
+    createUser,
 }

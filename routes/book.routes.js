@@ -29,12 +29,13 @@ router.get('/:id', async (req, res) => {
 
 router.post('/', async (req, res) => {
     await createBook(
-        req.body.author,
-        req.body.country,
-        req.body.language,
+        req.body.author.thrim(),
+        req.body.country.thrim(),
+        req.body.language.thrim(),
         req.body.pages,
-        req.body.title,
-        req.body.year)
+        req.body.title.thrim(),
+        req.body.year
+        )
     res.json({msg: 'book created'})
 })
 

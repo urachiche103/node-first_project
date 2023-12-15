@@ -6,12 +6,12 @@ const {findAll, findById, createUser} = require('../controllers/user.controller.
 const User = require('../models/user.model')
 
 router.get('/', async (req, res) => {
-    const users = await User.find()
+    const users = await findAll()
     res.json(users)
 })
 
 router.get('/:id', async (req, res) => {
-    const userFound = await User.findById(req.params.id)
+    const userFound = await findById(req.params.id)
     if (userFound) {
         res.json(userFound)
     } else {
@@ -23,13 +23,9 @@ router.post('/', async (req, res) => {
     if (req.body.email === undefined || req.body.email.trim() === '') {
         res.json({msg: 'error: email is missing'})
     } else {
-        const newUser = new User ({
-            email: req.body.email,
-            password: req.body.password,
-        })
-        await newUser.save()
+        await createUser(req.body.email.trim(), req.body.password)
+        }
         res.json({msg: 'created user'})
-    }
-})
+    })
 
 module.exports = router
