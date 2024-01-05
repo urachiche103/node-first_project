@@ -1,13 +1,35 @@
 const express = require('express')
 const router = express.Router()
 
-const {findAll, findById, createBook, deleteBook} = require('../controllers/book.controller')
+const {findAll, findContent, findById, createBook, deleteBook, modifyBook} = require('../controllers/book.controller')
 
-router.get('/', async (req, res) => {
+const {createBookValidation} = require('../helpers/validators')
+
+// router.get('/', async (req, res) => {
+//     try {
+//     const books = await findAll()
+//     res.json(books)
+//     } catch (error) {
+//         console.log(String(error))
+//         res.status(500).json({msg: 'internal error'})
+//     }
+// })
+
+router.get ('/', async (req, res) => {
     try {
-    const books = await findAll()
-    res.json(books)
-    } catch (error) {
+        const books = []
+        if (req.query.hasAnAuthor || req.query.hasCountry || req.query.hasLanguage || req.query.hasTitle || req.query.hasYear){
+            const author = req.query.hasAnAuthor ? req.query.hasAnAuthor : ''
+            const country = req.query.hasCountry ? req.query.hasCountry : ''
+            const language = req.query.hasLanguage ? req.query.hasLanguage : ''
+            const title = req.query.hasTitle ? req.query.hasTitle : ''
+            const year = req.query.hasYear ? req.query.hasYear : ''
+            books = await findContent(author, country, language, title, year)
+        } else {
+            books = await findAll()
+        }
+        res.json(books)
+    } catch (error){
         console.log(String(error))
         res.status(500).json({msg: 'internal error'})
     }
@@ -28,11 +50,11 @@ router.get('/:id', async (req, res) => {
 
 router.post('/', async (req, res, next) => {
     await createBook(
-        req.body.author,
-        req.body.country,
-        req.body.language,
+        req.body.author.trim(),
+        req.body.country.trim(),
+        req.body.language.trim(),
         req.body.pages,
-        req.body.title,
+        req.body.title.trim(),
         req.body.year)
     res.json({msg: 'book created'})
 })
@@ -44,6 +66,39 @@ router.delete('/:id', async (req, res) => {
     } else {
         res.json({msg: 'error: book not found'})
         }
+})
+
+router.put('/:id', async (req, res) => {
+    const found = null
+    const msg = []
+    const validationResult = createBookValidation(req.body)
+    if (!validationResult.valid){
+        res.status(400).json({msg: validationResult.message})
+    } else {
+        found = await modifyBook(
+            req.params.id,
+            req.body.author.trim(),
+            req.body.country.trim(),
+            req.body.language.trim(),
+            req.body.pages,
+            req.body.title.trim(),
+            req.body.year)
+        res.json(found === null ? {msg: 'error: book not found'} : {data: found, message: msg})
+    }
+})
+
+router.patch('/:id', async (req, res) => {
+    const found = null
+    const msg = []
+    found = await modifyBook(
+        req.params.id,
+        req.body.author.trim(),
+        req.body.country.trim(),
+        req.body.language.trim(),
+        req.body.pages,
+        req.body.title.trim(),
+        req.body.year)
+    res.json(found === null ? {msg: 'error: book not found'} : {data: found, message: msg})
 })
 
 module.exports = router
