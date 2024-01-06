@@ -10,7 +10,7 @@ async function findAllContent(author, country, language, title, year){
         country: {'$regex': country, '$options': 'i'},
         language: {'$regex': language, '$options': 'i'},
         title: {'$regex': title, '$options': 'i'},
-        year: {'$regex': year, '$options': 'i'},})
+        year: {'$regex': year, '$options': 'i'}})
     return books
 }
 

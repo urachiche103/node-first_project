@@ -19,11 +19,11 @@ router.get ('/', async (req, res) => {
     try {
         let books = []
         if (req.query.hasAnAuthor || req.query.hasCountry || req.query.hasLanguage || req.query.hasTitle || req.query.hasYear){
-            const author = req.query.hasAnAuthor ? req.query.hasAnAuthor : ''
-            const country = req.query.hasCountry ? req.query.hasCountry : ''
-            const language = req.query.hasLanguage ? req.query.hasLanguage : ''
-            const title = req.query.hasTitle ? req.query.hasTitle : ''
-            const year = req.query.hasYear ? req.query.hasYear : ''
+            const author = req.query.hasAnAuthor ? req.query.hasAnAuthor : ""
+            const country = req.query.hasCountry ? req.query.hasCountry : ""
+            const language = req.query.hasLanguage ? req.query.hasLanguage : ""
+            const title = req.query.hasTitle ? req.query.hasTitle : ""
+            const year = req.query.hasYear ? req.query.hasYear : ""
             books = await findAllContent(author, country, language, title, year)
         } else {
             books = await findAll()
@@ -69,8 +69,8 @@ router.delete('/:id', async (req, res) => {
 })
 
 router.put('/:id', async (req, res) => {
-    const found = null
-    const msg = []
+    let found = null
+    let msg = []
     const validationResult = createBookValidation(req.body)
     if (!validationResult.valid){
         res.status(400).json({msg: validationResult.message})
@@ -88,8 +88,8 @@ router.put('/:id', async (req, res) => {
 })
 
 router.patch('/:id', async (req, res) => {
-    const found = null
-    const msg = []
+    let found = null
+    let msg = []
     found = await modifyBook(
         req.params.id,
         req.body.author.trim(),
