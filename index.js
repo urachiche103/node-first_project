@@ -13,8 +13,8 @@ app.use(bodyParser.json())
 app.set('secretKey', process.env.JWTSECRET)
 
 mongoose.connect(process.env.URL, {
-    // useNewUrlParser: true,
-    // useUnifiedTopology: true,
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
 })
     .then(() => console.log('Connected to database!'))
     .catch(err => console.log('err'));

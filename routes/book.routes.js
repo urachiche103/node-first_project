@@ -1,30 +1,30 @@
 const express = require('express')
 const router = express.Router()
 
-const {findAll, findContent, findById, createBook, deleteBook, modifyBook} = require('../controllers/book.controller')
+const {findAll, findAllContent, findById, createBook, deleteBook, modifyBook} = require('../controllers/book.controller')
 
 const {createBookValidation} = require('../helpers/validators')
 
-// router.get('/', async (req, res) => {
-//     try {
-//     const books = await findAll()
-//     res.json(books)
-//     } catch (error) {
-//         console.log(String(error))
-//         res.status(500).json({msg: 'internal error'})
-//     }
-// })
+router.get('/', async (req, res) => {
+    try {
+    const books = await findAll()
+    res.json(books)
+    } catch (error) {
+        console.log(String(error))
+        res.status(500).json({msg: 'internal error'})
+    }
+})
 
 router.get ('/', async (req, res) => {
     try {
-        const books = []
+        let books = []
         if (req.query.hasAnAuthor || req.query.hasCountry || req.query.hasLanguage || req.query.hasTitle || req.query.hasYear){
             const author = req.query.hasAnAuthor ? req.query.hasAnAuthor : ''
             const country = req.query.hasCountry ? req.query.hasCountry : ''
             const language = req.query.hasLanguage ? req.query.hasLanguage : ''
             const title = req.query.hasTitle ? req.query.hasTitle : ''
             const year = req.query.hasYear ? req.query.hasYear : ''
-            books = await findContent(author, country, language, title, year)
+            books = await findAllContent(author, country, language, title, year)
         } else {
             books = await findAll()
         }
@@ -48,7 +48,7 @@ router.get('/:id', async (req, res) => {
     }
 })
 
-router.post('/', async (req, res, next) => {
+router.post('/', async (req, res) => {
     await createBook(
         req.body.author.trim(),
         req.body.country.trim(),

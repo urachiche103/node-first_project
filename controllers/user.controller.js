@@ -39,7 +39,7 @@ async function createUser(name, lastName, email, password, role){
 async function login(email, password){
     const userFound = await User.findOne(email)
     if (userFound) {
-        const matchResult = await checkup(userFound.password)
+        const matchResult = await checkup(userFound.password, password)
         if (matchResult) {
             const token = jwt.sign({id: userFound._id, name: userFound.email}, process.env.JWTSECRET, {expiresIn: '1h'})
             return {

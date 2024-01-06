@@ -5,13 +5,12 @@ async function findAll(){
     return books
 }
 
-async function findContent(author, country, language, title, year){
+async function findAllContent(author, country, language, title, year){
     const books = await Book.find({author: {'$regex': author, '$options': 'i'},
         country: {'$regex': country, '$options': 'i'},
         language: {'$regex': language, '$options': 'i'},
         title: {'$regex': title, '$options': 'i'},
-        year: {'$regex': year, '$options': 'i'},
-    })
+        year: {'$regex': year, '$options': 'i'},})
     return books
 }
 
@@ -27,7 +26,7 @@ async function createBook(author, country, language, pages, title, year){
         language: language,
         pages: pages,
         title: title,
-        year: year,
+        year: year
     })
     await newBook.save()
     return newBook
@@ -45,7 +44,7 @@ async function modifyBook(id, author, country, language, pages, title, year){
 
 module.exports  = {
     findAll,
-    findContent,
+    findAllContent,
     findById,
     createBook,
     deleteBook,
